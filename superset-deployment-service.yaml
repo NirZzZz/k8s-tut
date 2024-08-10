@@ -18,6 +18,14 @@ spec:
         image: amancevice/superset
         ports:
         - containerPort: 8088
+        volumeMounts:
+        - name: superset-config
+          mountPath: /app/pythonpath/superset_config.py
+          subPath: superset_config.py
+      volumes:
+      - name: superset-config
+        configMap:
+          name: superset-config
 ---
 apiVersion: v1
 kind: Service
@@ -30,4 +38,4 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 8088
-  type: LoadBalancer
+  type: NodePort
