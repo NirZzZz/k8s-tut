@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,9 +18,10 @@ spec:
         image: amancevice/superset
         ports:
         - containerPort: 8088
-        env:
-        - name: SECRET_KEY
-          value: "4+Z3M0NuD5bwSjj6TWLxJV6ca8TmDz0RkaWPAqYY5obU3wusALoxW31u"
+        configOverrides:
+          secret: |
+            SECRET_KEY = '4+Z3M0NuD5bwSjj6TWLxJV6ca8TmDz0RkaWPAqYY5obU3wusALoxW31u'
+---
 apiVersion: v1
 kind: Service
 metadata:
