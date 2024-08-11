@@ -20,7 +20,7 @@ spec:
         - containerPort: 8088
         volumeMounts:
         - name: superset-config
-          mountPath: /app/pythonpath/superset_config.py
+          mountPath: /app/superset_config.py
           subPath: superset_config.py
       volumes:
       - name: superset-config
