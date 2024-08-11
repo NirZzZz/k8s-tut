@@ -1,0 +1,35 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: superset-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: superset
+  template:
+    metadata:
+      labels:
+        app: superset
+    spec:
+      containers:
+      - name: superset
+        image: amancevice/superset
+        ports:
+        - containerPort: 8088
+        env:
+        - name: SECRET_KEY
+          value: "4+Z3M0NuD5bwSjj6TWLxJV6ca8TmDz0RkaWPAqYY5obU3wusALoxW31u"
+apiVersion: v1
+kind: Service
+metadata:
+  name: superset-service
+spec:
+  selector:
+    app: superset
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8088
+  type: NodePort
