@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,9 +17,17 @@ spec:
         image: amancevice/superset
         ports:
         - containerPort: 8088
-        configOverrides:
-          secret: |
-            SECRET_KEY = '4+Z3M0NuD5bwSjj6TWLxJV6ca8TmDz0RkaWPAqYY5obU3wusALoxW31u'
+        env:
+        - name: SUPERSET_CONFIG_PATH
+          value: "/app/pythonpath/superset_config.py"
+        volumeMounts:
+        - name: superset-config
+          mountPath: /app/pythonpath/superset_config.py
+          subPath: superset_config.py
+      volumes:
+      - name: superset-config
+        configMap:
+          name: superset-config
 ---
 apiVersion: v1
 kind: Service
@@ -33,4 +40,14 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 8088
-  type: NodePort
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: superset-config
+data:
+  superset_config.py: |
+    configOverrides:
+      secret: |
+        SECRET_KEY = '4+Z3M0NuD5bwSjj6TWLxJV6ca8TmDz0RkaWPAqYY5obU3wusALoxW31u'
